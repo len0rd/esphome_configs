@@ -1,0 +1,14 @@
+substitutions:
+  node_name: servercloset-fans
+  node_friendly_name: "Server Fans"
+
+packages:
+  device_base: !include home_common.yaml
+
+esp8266:
+  board: nodemcuv2
+
+switch:
+  - platform: gpio
+    name: "Fan Relay"
+    pin: D0

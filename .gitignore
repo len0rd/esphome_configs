@@ -1,0 +1,3 @@
+.esphome/
+# dont track your secrets!
+secrets.yaml

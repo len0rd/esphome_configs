@@ -1,0 +1,33 @@
+substitutions:
+  node_name: officewall-leds
+  node_friendly_name: "Pegboard LEDs"
+
+packages:
+  device_base: !include home_common.yaml
+
+esp8266:
+  board: d1_mini
+  framework:
+    version: 2.7.4
+
+light:
+  - platform: fastled_clockless
+    chipset: WS2812B
+    pin: D2
+    num_leds: 300
+    rgb_order: GRB
+    name: "Pegboard LEDs"
+    effects:
+      - pulse:
+          name: "Fast Pulse"
+          transition_length: 0.5s
+          update_interval: 0.5s
+      - addressable_color_wipe:
+          name: "Random Color Wipe"
+      - addressable_scan:
+          name: "Scanner"
+      - addressable_twinkle:
+          name: "Twinkle"
+      - addressable_color_wipe:
+          name: "Party Mode"
+          add_led_interval: 25ms
