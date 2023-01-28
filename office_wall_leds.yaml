@@ -10,6 +10,11 @@ esp8266:
   framework:
     version: 2.7.4
 
+sensor:
+  - platform: homeassistant
+    id: "octoprint_job_percentage"
+    entity_id: sensor.octoprint_job_percentage
+
 light:
   - platform: fastled_clockless
     chipset: WS2812B
@@ -22,12 +27,48 @@ light:
           name: "Fast Pulse"
           transition_length: 0.5s
           update_interval: 0.5s
+      - pulse:
+          name: "Slow Pulse"
+          # transition_length: 1s      # defaults to 1s
+          update_interval: 2s
       - addressable_color_wipe:
           name: "Random Color Wipe"
       - addressable_scan:
           name: "Scanner"
       - addressable_twinkle:
           name: "Twinkle"
+      - addressable_random_twinkle:
+          name: "Random Twinkle"
+          twinkle_probability: 10%
       - addressable_color_wipe:
           name: "Party Mode"
           add_led_interval: 25ms
+      - addressable_rainbow:
+      - addressable_rainbow:
+          name: "Speedy Rainbow"
+          speed: 50
+      - addressable_lambda:
+          name: "Printer Progress"
+          lambda: |-
+            const int leds_to_use = 164; // makes a full revolution
+            const int total_leds = it.size();
+            float job_percentage = id(octoprint_job_percentage).state;
+            if (!std::isfinite(job_percentage)) {
+              job_percentage = 0.0;
+            }
+
+            // number of leds that are drawn with full brightness
+            int full_leds = int(leds_to_use*job_percentage/100.0);
+
+            // set those leds to the current_color of the light
+            it.range(0, full_leds) = current_color;
+
+            // if full_leds is not the last led, render a remaining fraction of a led dimmed
+            if (full_leds < leds_to_use) {
+              it[full_leds] = current_color*((leds_to_use*job_percentage/100.0-full_leds)*255);
+            }
+
+            // set the remaining leds to black
+            if (full_leds+1 < total_leds) {
+              it.range(full_leds+1, total_leds) = ESPColor::BLACK; // change the color to something else if you want
+            }
