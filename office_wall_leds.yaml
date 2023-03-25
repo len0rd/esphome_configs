@@ -12,8 +12,8 @@ esp8266:
 
 sensor:
   - platform: homeassistant
-    id: "octoprint_job_percentage"
-    entity_id: sensor.octoprint_job_percentage
+    id: "printer_job_percentage"
+    entity_id: sensor.mainsail_progress
 
 light:
   - platform: fastled_clockless
@@ -52,7 +52,7 @@ light:
           lambda: |-
             const int leds_to_use = 164; // makes a full revolution
             const int total_leds = it.size();
-            float job_percentage = id(octoprint_job_percentage).state;
+            float job_percentage = id(printer_job_percentage).state;
             if (!std::isfinite(job_percentage)) {
               job_percentage = 0.0;
             }

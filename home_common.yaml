@@ -27,7 +27,6 @@ logger:
 api:
   encryption:
     key: ${api_key}
-  password: ${api_password}
   reboot_timeout: 120min
 
 preferences:
